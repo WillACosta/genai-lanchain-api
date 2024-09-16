@@ -1,0 +1,29 @@
+{
+  "name": "genai-langchain-api",
+  "version": "1.0.0",
+  "description": "This is an Express service that provides authorization functionality and includes gen-AI features.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "AI",
+    "LangChain",
+    "LLM",
+    "Express",
+    "RAG"
+  ],
+  "author": "William Amaral",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/google-genai": "^0.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "langchain": "^0.2.19"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "nodemon": "^3.1.4"
+  }
+}
