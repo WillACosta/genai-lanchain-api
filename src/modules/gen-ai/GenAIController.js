@@ -2,9 +2,7 @@ const { ChatGoogleGenerativeAI } = require('@langchain/google-genai')
 const { StringOutputParser } = require('@langchain/core/output_parsers')
 const { ChatPromptTemplate } = require('@langchain/core/prompts')
 
-const fs = require('fs')
-const path = require('path')
-const process = require('process')
+const { upload } = require('./upload-config')
 
 module.exports = {
 	async translateText(req, res) {
@@ -39,66 +37,24 @@ module.exports = {
 	},
 
 	async searchInDocument(req, res) {
-		let body = ''
-		let totalBytes = parseInt(req.headers['content-length'], 10)
-		let receivedBytes = 0
-		const generatedFileName = `user-file-${crypto.randomUUID()}.pdf`
-
-		res.setHeader('Content-Type', 'text/event-stream')
-		res.setHeader('Cache-Control', 'no-cache')
-		res.setHeader('Connection', 'keep-alive')
-
-		req.on('data', (chunk) => {
-			body += chunk.toString()
-			receivedBytes += chunk.length
-
-			const percentComplete = ((receivedBytes / totalBytes) * 100).toFixed(2)
-			res.write(`data: ${percentComplete}\n\n`)
-		})
-
-		req.on('end', () => {
-			const boundary = req.headers['content-type'].split('boundary=')[1]
-			const parts = body.split(`--${boundary}`)
-
-			const formData = {}
-			let fileBuffer = null
-
-			parts.forEach((part) => {
-				if (part.includes('Content-Disposition')) {
-					const nameMatch = part.match(/name="([^"]+)"/)
-					const fileNameMatch = part.match(/filename="([^"]+)"/)
-					const valueMatch = part.split('\r\n\r\n')[1]
-
-					if (nameMatch && valueMatch) {
-						const name = nameMatch[1]
-
-						if (fileNameMatch) {
-							const fileContent = valueMatch.split('\r\n')[0]
-							fileBuffer = Buffer.from(fileContent, 'binary')
-						} else {
-							const value = valueMatch.trim()
-							formData[name] = value
-						}
-					}
-				}
-			})
-
-			if (fileBuffer) {
-				const currentDir = process.cwd()
-				const filePath = path.join(currentDir, 'uploads', generatedFileName)
-				console.log('Final Buffer size: ', fileBuffer.length)
-
-				fs.writeFileSync(filePath, fileBuffer, 'binary')
+		upload(req, res, (err) => {
+			if (err) {
+				return res
+					.status(500)
+					.json({ message: 'File upload failed!', error: err })
 			}
 
-			const query = formData['query']
+			if (!req.file) {
+				return res.status(400).json({ error: 'Please send file' })
+			}
 
-			res.write(`data: 100\n\n`)
-			res.write(
-				`data: {"message": "File and query received successfully!", "data": {"query": "${query}", "filePath": "/uploads/${generatedFileName}"}}\n\n`,
-			)
+			const query = req.body.query
+			const filePath = `/uploads/${req.file.filename}`
 
-			res.end()
+			res.json({
+				message: 'File and query received successfully!',
+				data: { query, filePath },
+			})
 		})
 	},
 }
