@@ -18,6 +18,12 @@
 		"target": "ES2022",
 		"module": "nodenext",
 		"lib": ["ES2022", "dom"],
-		"types": ["node", "express", "multer", "cors"]
+		"types": ["node", "express", "multer", "cors"],
+		"baseUrl": "./",
+		"paths": {
+			"@src/*": ["src/*"],
+			"@common/*": ["src/common/*"],
+			"@modules/*": ["src/modules/*"]
+		}
 	}
 }

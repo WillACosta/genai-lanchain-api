@@ -1,15 +1,15 @@
-import { StringOutputParser } from '@langchain/core/output_parsers'
-import { ChatPromptTemplate } from '@langchain/core/prompts'
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
-import { Request, Response } from 'express'
+import { Request, Response } from 'express';
 
-import { upload } from './upload-config'
+import { upload } from '../config/upload.config';
+import { TranslateTextUseCase } from '../usecases';
 
-export default {
+export class GenAIController {
 	async translateText(
 		req: Request<any, any, { text: string; language: string }>,
 		res: Response,
 	) {
+		// TODO: Implement DI
+		const translateUseCase = new TranslateTextUseCase()
 		const { text, language } = req.body
 
 		if (language === undefined || text === undefined) {
@@ -18,27 +18,9 @@ export default {
 			})
 		}
 
-		const API_KEY = process.env['GEMINI_API_KEY']
-		const aiModel = new ChatGoogleGenerativeAI({
-			model: 'gemini-1.5-flash',
-			temperature: 0,
-			apiKey: API_KEY,
-		})
-
-		const systemTemplate = 'Translate the following text into {language}:'
-		const promptTemplate = ChatPromptTemplate.fromMessages([
-			['system', systemTemplate],
-			['user', '{text}'],
-		])
-
-		const chain = promptTemplate.pipe(aiModel).pipe(new StringOutputParser())
-		const result = await chain.invoke({
-			language: language,
-			text: text,
-		})
-
+		const result = await translateUseCase.invoke({ text, language })
 		return res.send(result)
-	},
+	}
 
 	async searchInDocument(
 		req: Request<any, any, { query: string }>,
@@ -63,5 +45,5 @@ export default {
 				data: { query, filePath },
 			})
 		})
-	},
+	}
 }

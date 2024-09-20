@@ -1,5 +1,5 @@
 import express from 'express'
-import GenAIRoutes from './modules/gen-ai/routes'
+import GenAIRoutes from './modules/genai/routes/routes'
 import StatusRoutes from './modules/status/routes'
 
 import cors from 'cors'
