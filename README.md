@@ -1,6 +1,6 @@
 ## Gen-AI API with Langchain and NodeJS
 
-This is an Express service that provides authorization functionality and includes gen-AI features.
+This is an Express service written in [TypeScript](https://www.typescriptlang.org/) that provides authorization functionality and includes gen-AI features.
 
 > 🌱 This project is under development.
 

@@ -1,0 +1,29 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"outDir": "./dist/out-tsc",
+		"strict": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"skipLibCheck": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"sourceMap": true,
+		"declaration": false,
+		"experimentalDecorators": true,
+		"moduleResolution": "nodenext",
+		"importHelpers": true,
+		"target": "ES2022",
+		"module": "nodenext",
+		"lib": ["ES2022", "dom"],
+		"types": ["node", "express", "multer", "cors"],
+		"baseUrl": "./",
+		"paths": {
+			"@src/*": ["src/*"],
+			"@common/*": ["src/common/*"],
+			"@modules/*": ["src/modules/*"]
+		}
+	}
+}
