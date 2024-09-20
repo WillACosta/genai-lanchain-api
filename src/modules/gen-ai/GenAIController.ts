@@ -1,11 +1,12 @@
-const { ChatGoogleGenerativeAI } = require('@langchain/google-genai')
-const { StringOutputParser } = require('@langchain/core/output_parsers')
-const { ChatPromptTemplate } = require('@langchain/core/prompts')
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
+import { Request, Response } from 'express'
 
-const { upload } = require('./upload-config')
+import { upload } from './upload-config'
 
-module.exports = {
-	async translateText(req, res) {
+export default {
+	async translateText(req: Request, res: Response) {
 		const { text, language } = req.body
 
 		if (language === undefined || text === undefined) {
@@ -14,7 +15,7 @@ module.exports = {
 			})
 		}
 
-		const API_KEY = process.env.GEMINI_API_KEY
+		const API_KEY = process.env['GEMINI_API_KEY']
 		const aiModel = new ChatGoogleGenerativeAI({
 			model: 'gemini-1.5-flash',
 			temperature: 0,
@@ -36,7 +37,7 @@ module.exports = {
 		return res.send(result)
 	},
 
-	async searchInDocument(req, res) {
+	async searchInDocument(req: Request, res: Response) {
 		upload(req, res, (err) => {
 			if (err) {
 				return res

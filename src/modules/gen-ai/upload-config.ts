@@ -1,6 +1,6 @@
-const multer = require('multer')
-const crypto = require('crypto')
-const path = require('path')
+import crypto from 'crypto'
+import multer from 'multer'
+import path from 'path'
 
 const storageConfig = multer.diskStorage({
 	destination: (req, file, callBack) => {
@@ -13,6 +13,4 @@ const storageConfig = multer.diskStorage({
 	},
 })
 
-module.exports = {
-	upload: multer({ storage: storageConfig }).single('document'),
-}
+export const upload = multer({ storage: storageConfig }).single('document')
