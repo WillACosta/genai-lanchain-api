@@ -6,7 +6,10 @@ import { Request, Response } from 'express'
 import { upload } from './upload-config'
 
 export default {
-	async translateText(req: Request, res: Response) {
+	async translateText(
+		req: Request<any, any, { text: string; language: string }>,
+		res: Response,
+	) {
 		const { text, language } = req.body
 
 		if (language === undefined || text === undefined) {
@@ -37,7 +40,10 @@ export default {
 		return res.send(result)
 	},
 
-	async searchInDocument(req: Request, res: Response) {
+	async searchInDocument(
+		req: Request<any, any, { query: string }>,
+		res: Response,
+	) {
 		upload(req, res, (err) => {
 			if (err) {
 				return res
@@ -52,7 +58,7 @@ export default {
 			const query = req.body.query
 			const filePath = `/uploads/${req.file.filename}`
 
-			res.json({
+			return res.json({
 				message: 'File and query received successfully!',
 				data: { query, filePath },
 			})
