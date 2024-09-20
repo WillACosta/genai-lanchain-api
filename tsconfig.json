@@ -21,7 +21,7 @@
 		"types": ["node", "express", "multer", "cors"],
 		"baseUrl": "./",
 		"paths": {
-			"@src/*": ["src/*"],
+			"@/*": ["src/*"],
 			"@common/*": ["src/common/*"],
 			"@modules/*": ["src/modules/*"]
 		}

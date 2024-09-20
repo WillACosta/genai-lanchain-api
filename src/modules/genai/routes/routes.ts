@@ -5,6 +5,6 @@ const controller = new GenAIController()
 const router = express.Router()
 
 router.post('/translate', controller.translateText)
-router.post('/searchInDocument', controller.searchInDocument)
+router.post('/search-in-document', controller.searchInDocument)
 
 export default router

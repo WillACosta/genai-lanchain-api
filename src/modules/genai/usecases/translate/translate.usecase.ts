@@ -1,7 +1,7 @@
+import { UseCase } from '@/common/types'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
-import { UseCase } from 'common'
 
 type Params = {
 	text: string
@@ -12,7 +12,8 @@ export class TranslateTextUseCase implements UseCase<string, Params> {
 	async invoke(params: { text: string; language: string }): Promise<string> {
 		const { text, language } = params
 
-		const API_KEY = process.env['GEMINI_API_KEY']
+		/// TODO: create a service to implement common LLM components
+		const API_KEY = process.env['GOOGLE_GENAI_API_KEY']
 		const aiModel = new ChatGoogleGenerativeAI({
 			model: 'gemini-1.5-flash',
 			temperature: 0,

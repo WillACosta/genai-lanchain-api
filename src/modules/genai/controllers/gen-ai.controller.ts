@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
-import { upload } from '../config/upload.config';
-import { TranslateTextUseCase } from '../usecases';
+import { SearchInDocumentUseCase, TranslateTextUseCase } from '../usecases';
+import { upload } from '../utils';
 
 export class GenAIController {
 	async translateText(
@@ -26,7 +26,9 @@ export class GenAIController {
 		req: Request<any, any, { query: string }>,
 		res: Response,
 	) {
-		upload(req, res, (err) => {
+		const useCase = new SearchInDocumentUseCase()
+
+		upload(req, res, async (err) => {
 			if (err) {
 				return res
 					.status(500)
@@ -34,15 +36,18 @@ export class GenAIController {
 			}
 
 			if (!req.file) {
-				return res.status(400).json({ error: 'Please send file' })
+				return res.status(400).json({ message: 'Please provide a valid file!' })
 			}
 
 			const query = req.body.query
 			const filePath = `/uploads/${req.file.filename}`
 
+			const { result } = await useCase.invoke({ query, filePath })
+
 			return res.json({
 				message: 'File and query received successfully!',
 				data: { query, filePath },
+				result,
 			})
 		})
 	}
