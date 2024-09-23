@@ -5,4 +5,8 @@ export const SEARCH_DOC_SYSTEM_PROMPT = `You are an experienced researcher, expe
 </context>
 
 Now, answer this question using the above context:
+
 {question}`
+
+export const REPHRASE_QUESTION_SYSTEM_TEMPLATE = `
+Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.`

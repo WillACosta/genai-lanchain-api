@@ -1,10 +1,10 @@
-import express from 'express'
-import GenAIRoutes from './modules/genai/routes/routes'
-import StatusRoutes from './modules/status/routes'
-
 import cors from 'cors'
 import dotenv from 'dotenv'
+import express from 'express'
 import config from './config'
+
+import GenAIRoutes from '@/modules/genai/application/routes'
+import StatusRoutes from '@/modules/status/routes'
 
 const app = express()
 const port = process.env['PORT'] || config.port

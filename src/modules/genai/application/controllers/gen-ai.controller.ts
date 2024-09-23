@@ -1,7 +1,10 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express'
 
-import { SearchInDocumentUseCase, TranslateTextUseCase } from '../usecases';
-import { upload } from '../utils';
+import {
+	SearchInDocumentUseCase,
+	TranslateTextUseCase,
+	upload,
+} from '../../core'
 
 export class GenAIController {
 	async translateText(

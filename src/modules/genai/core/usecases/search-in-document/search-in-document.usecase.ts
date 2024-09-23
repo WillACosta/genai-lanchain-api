@@ -1,17 +1,15 @@
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf'
 import { Document } from '@langchain/core/documents'
+import { StringOutputParser } from '@langchain/core/output_parsers'
 import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { RunnableSequence } from '@langchain/core/runnables'
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory'
 
 import {
 	ChatGoogleGenerativeAI,
 	GoogleGenerativeAIEmbeddings,
 } from '@langchain/google-genai'
-
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
-import { MemoryVectorStore } from 'langchain/vectorstores/memory'
-
-import { StringOutputParser } from '@langchain/core/output_parsers'
 
 import { UseCase } from '@/common/types'
 import { SEARCH_DOC_SYSTEM_PROMPT } from '../../utils'
@@ -21,33 +19,35 @@ export class SearchInDocumentUseCase implements UseCase<Result, Params> {
 	async invoke({ filePath, query }: Params): Promise<Result> {
 		const docs = await this._loadDocument(filePath)
 		const vectorStore = await this._initializeVectorStoreWithDocuments(docs)
-
-		const documentRetrievalChain = RunnableSequence.from([
-			(input) => input.question,
-			vectorStore.asRetriever(),
-			this._convertDocsToString,
-		])
-
-		const promptTemplate = ChatPromptTemplate.fromTemplate(
-			SEARCH_DOC_SYSTEM_PROMPT,
-		)
-
+		const retriever = vectorStore.asRetriever()
 		const llmModel = new ChatGoogleGenerativeAI({
 			model: 'gemini-1.5-flash',
 			apiKey: process.env['GOOGLE_GENAI_API_KEY'],
 		})
+
+		const documentRetrievalChain = RunnableSequence.from([
+			(input) => input.question,
+			retriever,
+			this._convertDocsToString,
+		])
+
+		const answerGenerationPrompt = ChatPromptTemplate.fromTemplate(
+			SEARCH_DOC_SYSTEM_PROMPT,
+		)
 
 		const retrievalChain = RunnableSequence.from([
 			{
 				context: documentRetrievalChain,
 				question: (input) => input.question,
 			},
-			promptTemplate,
+			answerGenerationPrompt,
 			llmModel,
 			new StringOutputParser(),
 		])
 
-		const result = await retrievalChain.invoke({ question: query })
+		const result = await retrievalChain.invoke({
+			question: query,
+		})
 
 		return { result }
 	}
