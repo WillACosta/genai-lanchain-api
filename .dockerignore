@@ -99,4 +99,9 @@ Thumbs.db
 
 # Docker files
 Dockerfile
-docker-compose.yml
+docker-compose.yaml
+
+# App
+*.pdf
+docs
+.gitignore
