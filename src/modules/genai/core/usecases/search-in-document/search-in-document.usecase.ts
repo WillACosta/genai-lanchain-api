@@ -1,7 +1,12 @@
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf'
 import { Document } from '@langchain/core/documents'
 import { StringOutputParser } from '@langchain/core/output_parsers'
-import { ChatPromptTemplate } from '@langchain/core/prompts'
+
+import {
+	ChatPromptTemplate,
+	MessagesPlaceholder,
+} from '@langchain/core/prompts'
+
 import { RunnableSequence } from '@langchain/core/runnables'
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
 import { MemoryVectorStore } from 'langchain/vectorstores/memory'
@@ -31,9 +36,11 @@ export class SearchInDocumentUseCase implements UseCase<Result, Params> {
 			this._convertDocsToString,
 		])
 
-		const answerGenerationPrompt = ChatPromptTemplate.fromTemplate(
-			SEARCH_DOC_SYSTEM_PROMPT,
-		)
+		const answerGenerationPrompt = ChatPromptTemplate.fromMessages([
+			['system', SEARCH_DOC_SYSTEM_PROMPT],
+			new MessagesPlaceholder('chat_history'),
+			['human', '{question}'],
+		])
 
 		const retrievalChain = RunnableSequence.from([
 			{

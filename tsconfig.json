@@ -17,7 +17,7 @@
 		"importHelpers": true,
 		"target": "ES2022",
 		"module": "nodenext",
-		"lib": ["ES2022", "dom"],
+		"lib": ["ES2023"],
 		"types": ["node", "express", "multer", "cors"],
 		"baseUrl": "./",
 		"paths": {

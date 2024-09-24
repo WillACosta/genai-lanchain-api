@@ -12,3 +12,4 @@ This is an Express service written in [TypeScript](https://www.typescriptlang.or
 - [JWT](https://jwt.io/) for handling authentication
 - [GoogleGenAI](https://v02.api.js.langchain.com/modules/_langchain_google_genai.html) langchain plugin.
 - [Google Gemini - API](https://ai.google.dev/)
+- [Docker](https://docs.docker.com/) Containers for setting up environment.

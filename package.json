@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "This is an Express service that provides authorization functionality and includes gen-AI features.",
   "scripts": {
+    "start": "tsx src/app.ts",
     "dev": "tsx watch src/app.ts"
   },
   "keywords": [
@@ -35,5 +36,6 @@
     "tslib": "^2.7.0",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
-  }
+  },
+  "packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b"
 }
