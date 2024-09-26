@@ -7,7 +7,10 @@ import {
 	MessagesPlaceholder,
 } from '@langchain/core/prompts'
 
-import { RunnableSequence } from '@langchain/core/runnables'
+import {
+	RunnablePassthrough,
+	RunnableSequence,
+} from '@langchain/core/runnables'
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
 import { MemoryVectorStore } from 'langchain/vectorstores/memory'
 
@@ -17,7 +20,10 @@ import {
 } from '@langchain/google-genai'
 
 import { UseCase } from '@/common/types'
-import { SEARCH_DOC_SYSTEM_PROMPT } from '../../utils'
+import {
+	CONTEXTUALIZED_SYSTEM_PROMPT,
+	SEARCH_DOC_SYSTEM_PROMPT,
+} from '../../utils'
 import { Params, Result } from './types'
 
 export class SearchInDocumentUseCase implements UseCase<Result, Params> {
@@ -30,30 +36,57 @@ export class SearchInDocumentUseCase implements UseCase<Result, Params> {
 			apiKey: process.env['GOOGLE_GENAI_API_KEY'],
 		})
 
-		const documentRetrievalChain = RunnableSequence.from([
-			(input) => input.question,
-			retriever,
-			this._convertDocsToString,
+		/// context chain init
+
+		const contextualizedPrompt = ChatPromptTemplate.fromMessages([
+			['system', CONTEXTUALIZED_SYSTEM_PROMPT],
+			new MessagesPlaceholder('chat_history'),
+			['human', '{question}'],
 		])
 
-		const answerGenerationPrompt = ChatPromptTemplate.fromMessages([
+		const contextualizedQuestionChain = RunnableSequence.from([
+			contextualizedPrompt,
+			llmModel,
+			new StringOutputParser(),
+		])
+
+		const contextualizedQuestion = (input: Record<string, any>) => {
+			if ('chat_history' in input) {
+				return contextualizedQuestionChain
+			}
+
+			return input['question']
+		}
+
+		/// context end
+
+		const qaPrompt = ChatPromptTemplate.fromMessages([
 			['system', SEARCH_DOC_SYSTEM_PROMPT],
 			new MessagesPlaceholder('chat_history'),
 			['human', '{question}'],
 		])
 
+		// if exists a history, so we need to append the history prompt
+		// to the chain
 		const retrievalChain = RunnableSequence.from([
-			{
-				context: documentRetrievalChain,
-				question: (input) => input.question,
-			},
-			answerGenerationPrompt,
+			RunnablePassthrough.assign({
+				context: (input) => {
+					if ('chat_history' in input) {
+						const chain = contextualizedQuestion(input)
+						return chain.pipe(retriever).pipe(this._convertDocsToString)
+					}
+
+					return ''
+				},
+			}),
+			qaPrompt,
 			llmModel,
 			new StringOutputParser(),
 		])
 
 		const result = await retrievalChain.invoke({
 			question: query,
+			chat_history: [], // We need to store AI messages to the history every time = result
 		})
 
 		return { result }
@@ -77,14 +110,14 @@ export class SearchInDocumentUseCase implements UseCase<Result, Params> {
 			chunkOverlap: 128,
 		})
 
-		const embeddings = new GoogleGenerativeAIEmbeddings({
-			apiKey: process.env['GOOGLE_GENAI_API_KEY'],
-			model: 'text-embedding-004',
-		})
-
 		const splitDocs = await splitter.splitDocuments(docs)
-		const vectorstore = new MemoryVectorStore(embeddings)
-		await vectorstore.addDocuments(splitDocs)
+		const vectorstore = await MemoryVectorStore.fromDocuments(
+			splitDocs,
+			new GoogleGenerativeAIEmbeddings({
+				apiKey: process.env['GOOGLE_GENAI_API_KEY'],
+				model: 'text-embedding-004',
+			}),
+		)
 
 		return vectorstore
 	}
