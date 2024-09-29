@@ -18,7 +18,7 @@
 		"target": "ES2022",
 		"module": "nodenext",
 		"lib": ["ES2023"],
-		"types": ["node", "express", "multer", "cors"],
+		"types": ["node", "express", "multer", "cors", "redis"],
 		"baseUrl": "./",
 		"paths": {
 			"@/*": ["src/*"],

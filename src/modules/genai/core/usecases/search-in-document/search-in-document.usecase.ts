@@ -20,11 +20,29 @@ import {
 } from '@langchain/google-genai'
 
 import { UseCase } from '@/common/types'
+import { RedisChatMessageHistory } from '@langchain/redis'
+import { BufferMemory } from 'langchain/memory'
+
 import {
 	CONTEXTUALIZED_SYSTEM_PROMPT,
 	SEARCH_DOC_SYSTEM_PROMPT,
 } from '../../utils'
+
 import { Params, Result } from './types'
+
+/// TODO: delegate to RedisClient class
+const chatMemory = new BufferMemory({
+	chatHistory: new RedisChatMessageHistory({
+		sessionId: 'a168c61a-c431-4ef8-bc1c-fedd808d45ea',
+		sessionTTL: 3600, // 300 = 5m, 3600 = 1h, null = never
+		config: {
+			url: process.env['REDIS_URL'],
+			password: process.env['REDIS_PASSWORD'],
+		},
+	}),
+	returnMessages: true,
+	memoryKey: 'chat_history',
+})
 
 export class SearchInDocumentUseCase implements UseCase<Result, Params> {
 	async invoke({ filePath, query }: Params): Promise<Result> {
@@ -36,7 +54,7 @@ export class SearchInDocumentUseCase implements UseCase<Result, Params> {
 			apiKey: process.env['GOOGLE_GENAI_API_KEY'],
 		})
 
-		/// context chain init
+		/// Standalone question referencing past context
 
 		const contextualizedPrompt = ChatPromptTemplate.fromMessages([
 			['system', CONTEXTUALIZED_SYSTEM_PROMPT],
@@ -50,45 +68,41 @@ export class SearchInDocumentUseCase implements UseCase<Result, Params> {
 			new StringOutputParser(),
 		])
 
-		const contextualizedQuestion = (input: Record<string, any>) => {
-			if ('chat_history' in input) {
-				return contextualizedQuestionChain
-			}
+		/// Standalone question end
 
-			return input['question']
-		}
-
-		/// context end
-
-		const qaPrompt = ChatPromptTemplate.fromMessages([
+		const questionAnsweringPrompt = ChatPromptTemplate.fromMessages([
 			['system', SEARCH_DOC_SYSTEM_PROMPT],
 			new MessagesPlaceholder('chat_history'),
 			['human', '{question}'],
 		])
 
-		// if exists a history, so we need to append the history prompt
-		// to the chain
 		const retrievalChain = RunnableSequence.from([
 			RunnablePassthrough.assign({
-				context: (input) => {
+				context: (input: Record<string, any>) => {
 					if ('chat_history' in input) {
-						const chain = contextualizedQuestion(input)
-						return chain.pipe(retriever).pipe(this._convertDocsToString)
+						return RunnableSequence.from([
+							contextualizedQuestionChain,
+							retriever,
+							this._convertDocsToString,
+						])
 					}
 
 					return ''
 				},
 			}),
-			qaPrompt,
+			questionAnsweringPrompt,
 			llmModel,
 			new StringOutputParser(),
 		])
 
+		const memoryResults = await chatMemory.loadMemoryVariables({})
+		const history = memoryResults['chat_history']
 		const result = await retrievalChain.invoke({
 			question: query,
-			chat_history: [], // We need to store AI messages to the history every time = result
+			chat_history: history,
 		})
 
+		await chatMemory.saveContext({ input: query }, { output: result })
 		return { result }
 	}
 

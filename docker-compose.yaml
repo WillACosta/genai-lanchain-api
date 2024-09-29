@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
-    environment:
-      - NODE_ENV=development
+    env_file:
+      - .env
     volumes:
       - ./src:/usr/workspace/app/src
       - pnpm_store:/pnpm/.pnpm-store
