@@ -17,11 +17,11 @@
 		"importHelpers": true,
 		"target": "ES2022",
 		"module": "nodenext",
-		"lib": ["ES2022", "dom"],
-		"types": ["node", "express", "multer", "cors"],
+		"lib": ["ES2023"],
+		"types": ["node", "express", "multer", "cors", "redis"],
 		"baseUrl": "./",
 		"paths": {
-			"@src/*": ["src/*"],
+			"@/*": ["src/*"],
 			"@common/*": ["src/common/*"],
 			"@modules/*": ["src/modules/*"]
 		}

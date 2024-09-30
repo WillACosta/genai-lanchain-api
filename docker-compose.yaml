@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    volumes:
+      - ./src:/usr/workspace/app/src
+      - pnpm_store:/pnpm/.pnpm-store
+    command: sh -c "pnpm install && pnpm dev"
+
+  postgres:
+    image: bitnami/postgresql:latest
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=rag_app
+    volumes:
+      - 'rag_app_postgres_data:/bitnami/postgresql'
+
+  redis:
+    image: bitnami/redis:latest
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - 'rag_app_redis_data:/bitnami/redis/data'
+
+volumes:
+  pnpm_store:
+  rag_app_redis_data:
+  rag_app_postgres_data:
