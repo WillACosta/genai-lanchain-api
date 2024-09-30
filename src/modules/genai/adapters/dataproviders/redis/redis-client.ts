@@ -21,9 +21,9 @@ export class RedisClient {
 		await this._redisClient.quit()
 	}
 
-	async storeValue(key: string, value: object): Promise<void> {
+	async storeValue(key: string, value: object, ttl?: number): Promise<void> {
 		await this._redisClient.set(key, JSON.stringify(value), {
-			EX: 300,
+			EX: ttl,
 			NX: true,
 		})
 	}
