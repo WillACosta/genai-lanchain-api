@@ -1,10 +1,10 @@
 import express from 'express'
-import { GenAIController } from '../controllers/gen-ai.controller'
 
-const controller = new GenAIController()
+import { genAIController } from '@/di'
+
 const router = express.Router()
 
-router.post('/translate', controller.translateText)
-router.post('/search-in-document', controller.searchInDocument)
+router.post('/translate', genAIController.translateText)
+router.post('/search-in-document', genAIController.searchInDocument)
 
 export default router

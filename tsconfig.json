@@ -23,7 +23,8 @@
 		"paths": {
 			"@/*": ["src/*"],
 			"@common/*": ["src/common/*"],
-			"@modules/*": ["src/modules/*"]
+			"@modules/*": ["src/modules/*"],
+			"@di": ["src/di/index.ts"]
 		}
 	}
 }
