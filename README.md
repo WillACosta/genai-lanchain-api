@@ -15,6 +15,35 @@ This is an Express service written in [TypeScript](https://www.typescriptlang.or
 - [Docker](https://docs.docker.com/) Containers for setting up environment.
 - [Redis](https://redis.io/) database for storing AI messages.
 
+## Project Structure
+
+```yaml
+common: common code and utilities for all modules
+di: dependency injection container
+modules: application features
+  module_name:
+    adapters: class adapters for external resources
+      dataproviders:
+      services:
+
+    application: application layer for controllers and routes
+      controllers:
+      routes:
+
+    core: application core logic
+      entities:
+      usecases:
+      utils: class and constant utilities for this module
+```
+
+## Prerequisites
+
+Before running the application, make sure you have the following installed:
+
+- NodeJS (v20.12.1)
+- PNPM (v9.7.0)
+- Docker (v27.2.0)
+
 ## Running the application
 
 1. Clone this repository
