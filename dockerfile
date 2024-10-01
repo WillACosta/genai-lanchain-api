@@ -9,7 +9,7 @@ RUN mkdir -p $PNPM_HOME
 
 RUN pnpm config set store-dir "$PNPM_HOME/.pnpm-store" --global
 
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json pnpm-lock.yaml* dynamic-url-config.js ./
 RUN pnpm install --frozen-lockfile
 COPY . .
 
