@@ -1,8 +1,8 @@
 import { prismaClient } from '@/di'
-import { User } from '../../core'
+import { UserParams } from '../../core'
 
 export class UserDataProvider {
-	async insert({ name, email, password }: User) {
+	async insert({ name, email, password }: UserParams) {
 		return await prismaClient.users.create({
 			data: {
 				name,
@@ -12,7 +12,7 @@ export class UserDataProvider {
 		})
 	}
 
-	async update({ id, name, email, password }: User) {
+	async update({ id, name, email, password }: UserParams) {
 		return await prismaClient.users.update({
 			where: {
 				id,

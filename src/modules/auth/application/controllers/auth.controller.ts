@@ -4,12 +4,12 @@ import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 
 import { UserDataProvider } from '@/modules/users/adapters/dataproviders/user.dataprovider'
-import { User } from '@/modules/users/core'
+import { UserParams } from '@/modules/users/core'
 
 export class AuthController {
 	constructor(private _userDataProvider: UserDataProvider) {}
 
-	register = async (req: Request<User>, res: Response) => {
+	register = async (req: Request<UserParams>, res: Response) => {
 		const { password, ...user } = req.body
 		const encryptedPassword = this._encryptPassword(password)
 
@@ -40,7 +40,7 @@ export class AuthController {
 			})
 	}
 
-	sign = async (req: Request<User>, res: Response) => {
+	sign = async (req: Request<UserParams>, res: Response) => {
 		const { password, email } = req.body
 		const encryptedPassword = this._encryptPassword(password)
 		const defaultErrorMessage = 'Provided email or password might be incorrect.'

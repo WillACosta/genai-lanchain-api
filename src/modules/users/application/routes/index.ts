@@ -1,17 +1,18 @@
 import express from 'express'
 
+import { isAuthenticated } from '@/common/middlewares'
 import { usersController } from '@/di'
 
 const router = express.Router()
 
-router.get('/', usersController.getUser)
-router.patch('/', usersController.updateUser)
+router.get('/', isAuthenticated, usersController.getUser)
+router.patch('/', isAuthenticated, usersController.updateUser)
 
-router.get('/all', usersController.getAllUsers)
+router.get('/all', isAuthenticated, usersController.getAllUsers)
 
-router.delete('/:id', usersController.deleteUser)
-router.post('/:id', usersController.getUser)
+router.delete('/:id', isAuthenticated, usersController.deleteUser)
+router.post('/:id', isAuthenticated, usersController.getUser)
 
-router.put('/:id', usersController.updateUser)
+router.put('/:id', isAuthenticated, usersController.updateUser)
 
 export default router
