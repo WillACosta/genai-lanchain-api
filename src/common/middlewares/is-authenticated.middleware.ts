@@ -1,13 +1,10 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
-export interface AuthRequest extends Request {
-	user?: object
-	token?: string
-}
+import { AppRequest } from '../types'
 
 export function isAuthenticated(
-	req: AuthRequest,
+	req: AppRequest,
 	res: Response,
 	next: NextFunction,
 ) {
@@ -26,7 +23,7 @@ export function isAuthenticated(
 		return res.status(401).json({
 			success: false,
 			error: {
-				message: 'Invalid auth mechanism.',
+				message: 'Invalid auth mechanism. This API supports only Bearer token.',
 			},
 		})
 	}

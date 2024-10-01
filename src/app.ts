@@ -19,7 +19,7 @@ app.use(express.json())
 
 app.use('/', AuthRoutes)
 app.use('/status', StatusRoutes)
-app.use('/user', UserRoutes)
+app.use('/users', UserRoutes)
 app.use('/gen-ai', GenAIRoutes)
 
 app.listen(port, () => {

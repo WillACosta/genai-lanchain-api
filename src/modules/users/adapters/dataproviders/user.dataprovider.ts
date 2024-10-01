@@ -1,18 +1,34 @@
 import { prismaClient } from '@/di'
+import { Prisma } from '@prisma/client'
 import { UserParams } from '../../core'
 
+export type PrismaUser = Prisma.PromiseReturnType<
+	typeof UserDataProvider.prototype.getUserById
+>
+
 export class UserDataProvider {
-	async insert({ name, email, password }: UserParams) {
+	private _selectUserProperties = {
+		id: true,
+		name: true,
+		email: true,
+		createdAt: true,
+	}
+
+	insert = async ({ name, email, password }: UserParams) => {
 		return await prismaClient.users.create({
 			data: {
 				name,
 				email,
 				password,
 			},
+			select: this._selectUserProperties,
 		})
 	}
 
-	async update({ id, name, email, password }: UserParams) {
+	update = async (
+		id: string,
+		{ name, email }: { name: string; email: string },
+	) => {
 		return await prismaClient.users.update({
 			where: {
 				id,
@@ -20,32 +36,36 @@ export class UserDataProvider {
 			data: {
 				name,
 				email,
-				password,
 			},
+			select: this._selectUserProperties,
 		})
 	}
 
-	async delete(id: string) {
+	delete = async (id: string) => {
 		return await prismaClient.users.delete({
 			where: {
 				id,
 			},
+			select: this._selectUserProperties,
 		})
 	}
 
-	async getAllUsers() {
-		return await prismaClient.users.findMany()
+	getAllUsers = async () => {
+		return await prismaClient.users.findMany({
+			select: this._selectUserProperties,
+		})
 	}
 
-	async getUserById(id: string) {
+	getUserById = async (id: string) => {
 		return await prismaClient.users.findUnique({
 			where: {
 				id,
 			},
+			select: this._selectUserProperties,
 		})
 	}
 
-	async findUserByEmail(email: string) {
+	findUserByEmail = async (email: string) => {
 		return await prismaClient.users.findUnique({
 			where: {
 				email,
