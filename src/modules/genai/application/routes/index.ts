@@ -1,11 +1,21 @@
 import express from 'express'
 
-import { isAuthenticated } from '@/common/middlewares'
+import {
+	isAuthenticated,
+	translateTextSchema,
+	validateRequestBody,
+} from '@/common/middlewares'
+
 import { genAIController } from '@/di'
 
 const router = express.Router()
 
-router.post('/translate', isAuthenticated, genAIController.translateText)
+router.post(
+	'/translate',
+	isAuthenticated,
+	validateRequestBody(translateTextSchema),
+	genAIController.translateText,
+)
 
 router.post(
 	'/search-in-document',

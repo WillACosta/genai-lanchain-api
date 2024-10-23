@@ -1,4 +1,5 @@
 export type Params = {
+	userId: string
 	query: string
 	filePath: string
 }
