@@ -14,6 +14,7 @@ This is an Express service written in [TypeScript](https://www.typescriptlang.or
 - [Google Gemini - API](https://ai.google.dev/)
 - [Docker](https://docs.docker.com/) Containers for setting up environment.
 - [Redis](https://redis.io/) database for storing AI messages.
+- [ZOD](https://zod.dev/) as body parameters validation.
 
 ## Project Structure
 

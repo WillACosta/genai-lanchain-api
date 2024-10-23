@@ -30,7 +30,7 @@ const searchInDocumentUseCase = new SearchInDocumentUseCase(
 	documentService,
 )
 
-const translateUseCase = new TranslateTextUseCase()
+const translateUseCase = new TranslateTextUseCase(llmService)
 
 // User Module
 const userDatProvider = new UserDataProvider()
@@ -51,4 +51,3 @@ export {
   userDatProvider,
   usersController
 }
-
