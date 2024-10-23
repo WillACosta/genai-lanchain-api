@@ -1,7 +1,6 @@
-version: '3.8'
-
 services:
   app:
+    container_name: genai_app
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,32 +8,41 @@ services:
       - '3000:3000'
     env_file:
       - .env
+    environment:
+      IS_DOCKER: true
+      DATABASE_URL: ${DATABASE_URL_DOCKER}
+      REDIS_URL: ${REDIS_URL_DOCKER}
     volumes:
       - ./src:/usr/workspace/app/src
       - pnpm_store:/pnpm/.pnpm-store
-    command: sh -c "pnpm install && pnpm dev"
+    command: sh -c "pnpm install && node dynamic-url-config.js && npx prisma generate && pnpm dev"
+    depends_on:
+      - postgres
+      - redis
 
   postgres:
+    container_name: genai_app_postgres
     image: bitnami/postgresql:latest
+    environment:
+      POSTGRES_USER: genaiapp
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: genaiapp_db
     ports:
       - '5432:5432'
-    environment:
-      - POSTGRES_USER=docker
-      - POSTGRES_PASSWORD=docker
-      - POSTGRES_DB=rag_app
     volumes:
-      - 'rag_app_postgres_data:/bitnami/postgresql'
+      - 'genai_app_postgres_data:/bitnami/postgresql'
 
   redis:
+    container_name: genai_app_redis
     image: bitnami/redis:latest
+    environment:
+      ALLOW_EMPTY_PASSWORD: yes
     ports:
       - '6379:6379'
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
     volumes:
-      - 'rag_app_redis_data:/bitnami/redis/data'
+      - 'genai_app_redis_data:/bitnami/redis/data'
 
 volumes:
   pnpm_store:
-  rag_app_redis_data:
-  rag_app_postgres_data:
+  genai_app_redis_data:
+  genai_app_postgres_data:
