@@ -37,6 +37,17 @@ modules: application features
       utils: class and constant utilities for this module
 ```
 
+### Search In Document Flow
+
+The search in document endpoint is the most complex of this application, it uses RAG concepts to break down the provided
+PDF document into a small chunks and then use it as a context for the followup user questions. Also, it uses Redis to store
+and retrieve chat history during user's session.
+
+> As an improvement, it'll be worth to have a separated endpoint for uploading documents and another one for handling questions
+> to it. To keep things easy to follow up and having a single endpoint, the diagram is as you can see below:
+
+![GenAI Search in Document Flow](docs/genai-flow.png 'GenAI Search in Document Flow')
+
 ## Prerequisites
 
 Before running the application, make sure you have the following installed:
@@ -53,7 +64,8 @@ Before running the application, make sure you have the following installed:
 git clone https://github.com/WillACosta/genai-langchain-api
 ```
 
-> Copy the `.env.example` file to `.env` and fill it with your own credentials
+> Copy the `.env.example` file to `.env` and fill it with your own credentials. Get here:
+> [Google Gemini](https://ai.google.dev/) | [LangChain](https://js.langchain.com/docs/introduction/)
 
 ```shell
 cp .env.example .env
