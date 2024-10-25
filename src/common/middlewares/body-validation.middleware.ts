@@ -12,6 +12,11 @@ export const userCredentialsSchema = z.object({
 	email: z.string().email('Invalid email address'),
 })
 
+export const updateUserSchema = z.object({
+	email: z.string().email('Invalid email address'),
+	name: z.string().min(1, 'name field is required'),
+})
+
 export const translateTextSchema = z.object({
 	text: z.string().min(1, 'text field is required'),
 	language: z.string().min(1, 'language field is required'),

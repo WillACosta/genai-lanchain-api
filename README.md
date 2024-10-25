@@ -2,7 +2,9 @@
 
 This is an Express service written in [TypeScript](https://www.typescriptlang.org/) that provides authorization functionality and includes gen-AI features, using RAG concepts, vector database and implements AI memory history with Redis DB.
 
-> 🌱 This project is under development.
+<center>
+  <img src="docs/docs-screenshot.jpeg" alt="Swagger UI screenshot">
+</center>
 
 ## Resources
 
@@ -15,6 +17,7 @@ This is an Express service written in [TypeScript](https://www.typescriptlang.or
 - [Docker](https://docs.docker.com/) Containers for setting up environment.
 - [Redis](https://redis.io/) database for storing AI messages.
 - [ZOD](https://zod.dev/) as body parameters validation.
+- Automated [OpenAPI](https://www.openapis.org/what-is-openapi) specifications using [JsDocs](https://jsdoc.app/) and [Swagger UI](https://swagger.io/tools/swagger-ui/) for generating documentation.
 
 ## Project Structure
 
@@ -79,4 +82,12 @@ cp .env.example .env
 docker compose up --build
 ```
 
-> The application will be available at `http://localhost:3000`.
+> The application will be available at `http://localhost:3000`.<br>
+
+## Documentation
+
+The documentation process is automated using `swagger-ui-express` and `swagger-jsdoc` libraries, on each application route definition you will find a comment with the necessary specifications for that route in particular.
+
+During the build process the application will handle the route comments and generate the final `OpenApi` specification for the `Swagger UI`.
+
+After that you will be able to access: `localhost:3000/docs` in your browser and see the docs.

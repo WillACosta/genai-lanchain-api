@@ -4,6 +4,7 @@
     "dataproviders",
     "gemini",
     "nodenext",
+    "openapi",
     "predev",
     "prestart",
     "usecases"
