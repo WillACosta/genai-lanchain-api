@@ -2,21 +2,20 @@
 
 This is an Express service written in [TypeScript](https://www.typescriptlang.org/) that provides authorization functionality and includes gen-AI features, using RAG concepts, vector database and implements AI memory history with Redis DB.
 
-<center>
-  <img src="docs/docs-screenshot.jpeg" alt="Swagger UI screenshot">
-</center>
+![Swagger UI screenshot](docs/docs-screenshot.jpeg 'Swagger UI screenshot')
 
 ## Resources
 
-- [LangChain](https://js.langchain.com/docs/introduction/) for handling LLM and RAG functionality.
 - [Express](https://expressjs.com/) and [Node](https://nodejs.org/en/) for creating backend service.
-- [Qdrant](https://qdrant.tech/) as vector store database.
+- [LangChain](https://js.langchain.com/docs/introduction/) for handling LLM and RAG functionality.
 - [JWT](https://jwt.io/) for handling authentication
-- [GoogleGenAI](https://v02.api.js.langchain.com/modules/_langchain_google_genai.html) langchain plugin.
+- [GoogleGenAI langchain](https://v02.api.js.langchain.com/modules/_langchain_google_genai.html) plugin.
 - [Google Gemini - API](https://ai.google.dev/)
-- [Docker](https://docs.docker.com/) Containers for setting up environment.
+- [Docker](https://docs.docker.com/) containers for setting up environment.
 - [Redis](https://redis.io/) database for storing AI messages.
 - [ZOD](https://zod.dev/) as body parameters validation.
+- [PostgreSQL](https://www.postgresql.org/) database for store user data
+- [Prisma ORM](https://www.prisma.io/) for managing the database
 - Automated [OpenAPI](https://www.openapis.org/what-is-openapi) specifications using [JsDocs](https://jsdoc.app/) and [Swagger UI](https://swagger.io/tools/swagger-ui/) for generating documentation.
 
 ## Project Structure
