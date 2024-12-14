@@ -10,13 +10,15 @@ export class AuthController {
 	constructor(private _userDataProvider: UserDataProvider) {}
 
 	register = async (req: Request<UserParams>, res: Response) => {
-		const { password, ...user } = req.body
+		const { password, role, ...user } = req.body
 		const encryptedPassword = this._encryptPassword(password)
+		const currentRole = role ?? 'user'
 
 		this._userDataProvider
 			.insert({
 				...user,
 				password: encryptedPassword,
+				role: currentRole,
 			})
 			.then((user) => {
 				return res.status(201).json({
@@ -72,6 +74,7 @@ export class AuthController {
 						name: user.name,
 						email: user.email,
 						createdAt: user.createdAt,
+						role: user.role,
 					},
 					token: this._generateAccessToken(user),
 				},

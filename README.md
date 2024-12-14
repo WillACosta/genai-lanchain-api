@@ -90,3 +90,34 @@ The documentation process is automated using `swagger-ui-express` and `swagger-j
 During the build process the application will handle the route comments and generate the final `OpenApi` specification for the `Swagger UI`.
 
 After that you will be able to access: `localhost:3000/docs` in your browser and see the docs.
+
+> The application will be available at `http://localhost:3000`.
+
+## Prisma ORM
+
+This project uses Prisma ORM (Object-Relational Mapping), at every modifications related to the database schema,
+a new migration is needed, create a new one running:
+
+```shell
+npx prisma migrate dev
+```
+
+After that generate a new prisma client instance with:
+
+```shell
+npx prisma generate
+```
+
+## Authenticating and RBAC
+
+This projects uses `jwt` for authenticating users and managing session, also it uses Role-Based Access Control for limiting some aspects of the API, such as users management.
+
+The current supported roles are: [`admin`, `user`]:
+
+| Endpoint                    | Admin                 | User                  |
+| --------------------------- | --------------------- | --------------------- |
+| GET users/                  | <ul><li>[x]</li></ul> | <ul><li>[x]</li></ul> |
+| PATCH users/                | <ul><li>[x]</li></ul> | <ul><li>[x]</li></ul> |
+| PATCH users/change-role/:id | <ul><li>[x]</li></ul> |                       |
+| GET users/all               | <ul><li>[x]</li></ul> |                       |
+| DELETE users/:id            | <ul><li>[x]</li></ul> |                       |

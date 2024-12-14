@@ -3,4 +3,5 @@ export type UserParams = {
 	email: string
 	password: string
 	name?: string
+	role?: 'user' | 'admin'
 }
