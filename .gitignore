@@ -2,3 +2,4 @@ docs/examples
 node_modules/
 .env
 *.pdf
+dist/

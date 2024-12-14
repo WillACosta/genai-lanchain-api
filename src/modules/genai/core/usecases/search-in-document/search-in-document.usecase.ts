@@ -26,12 +26,12 @@ import {
 
 export class SearchInDocumentUseCase implements UseCase<Result, Params> {
 	constructor(
-		private _memory: ChatMemory,
 		private _llmService: LLMService,
 		private _documentService: DocumentsService,
 	) {}
 
-	async invoke({ filePath, query }: Params): Promise<Result> {
+	async invoke({ filePath, query, userId }: Params): Promise<Result> {
+		const chatMemory = new ChatMemory(userId)
 		const llmModel = this._llmService.llm
 		const docs = await this._documentService.loadDocument(filePath)
 		const { retriever } = await this._documentService.initializeVectorStore(
@@ -75,13 +75,13 @@ export class SearchInDocumentUseCase implements UseCase<Result, Params> {
 			new StringOutputParser(),
 		])
 
-		const history = await this._memory.retrieveMemoryHistory()
+		const history = await chatMemory.retrieveMemoryHistory()
 		const result = await retrievalChain.invoke({
 			question: query,
 			chat_history: history,
 		})
 
-		this._memory.saveChatHistory(query, result)
+		chatMemory.saveChatHistory(query, result)
 		return { result }
 	}
 }

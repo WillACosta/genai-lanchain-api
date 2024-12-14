@@ -2,10 +2,10 @@ import { RedisChatMessageHistory } from '@langchain/redis'
 import { BufferMemory } from 'langchain/memory'
 
 export class ChatMemory {
-	constructor() {
+	constructor(private userId: string) {
 		this._memory = new BufferMemory({
 			chatHistory: new RedisChatMessageHistory({
-				sessionId: 'a168c61a-c431-4ef8-bc1c-fedd808d45ea',
+				sessionId: userId,
 				sessionTTL: 3600,
 				config: {
 					url: process.env['REDIS_URL'],

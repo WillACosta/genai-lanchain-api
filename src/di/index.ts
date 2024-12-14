@@ -1,10 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-import {
-  ChatMemory,
-  DocumentsService,
-  LLMService,
-} from '@/modules/genai/adapters'
+import { DocumentsService, LLMService } from '@/modules/genai/adapters'
 
 import {
   SearchInDocumentUseCase,
@@ -17,7 +13,6 @@ import { UserDataProvider } from '@/modules/users/adapters/dataproviders/user.da
 import { UsersController } from '@/modules/users/application/controllers/users.controller'
 
 // Common
-const chatMemory = new ChatMemory()
 const llmService = new LLMService()
 const prismaClient = new PrismaClient()
 
@@ -25,7 +20,6 @@ const prismaClient = new PrismaClient()
 const genAIController = new GenAIController()
 const documentService = new DocumentsService(llmService)
 const searchInDocumentUseCase = new SearchInDocumentUseCase(
-	chatMemory,
 	llmService,
 	documentService,
 )
@@ -41,7 +35,6 @@ const authController = new AuthController(userDatProvider)
 
 export {
   authController,
-  chatMemory,
   documentService,
   genAIController,
   llmService,

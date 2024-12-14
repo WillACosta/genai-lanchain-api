@@ -1,11 +1,14 @@
 import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
+import swaggerUi from 'swagger-ui-express'
+
+import swaggerSpec from 'swagger'
 import config from './config'
 
 import AuthRoutes from '@/modules/auth/application/routes'
 import GenAIRoutes from '@/modules/genai/application/routes'
-import StatusRoutes from '@/modules/status/routes'
+import StatusRoutes from '@/modules/status/application/routes'
 import UserRoutes from '@/modules/users/application/routes'
 
 const app = express()
@@ -16,6 +19,8 @@ dotenv.config()
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 app.use('/', AuthRoutes)
 app.use('/status', StatusRoutes)
