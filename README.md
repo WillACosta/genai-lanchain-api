@@ -116,10 +116,13 @@ This project uses `jwt` for authenticating users and managing sessions. It also 
 
 Current supported roles are: [`admin`, `user`]:
 
-| Endpoint                    | Admin | User |
-| --------------------------- | ----- | ---- |
-| GET users/                  | [x]   | [x]  |
-| PATCH users/                | [x]   | [x]  |
-| PATCH users/change-role/:id | [x]   |      |
-| GET users/all               | [x]   |      |
-| DELETE users/:id            | [x]   |      |
+| Endpoint                       | Admin | User |
+| ------------------------------ | ----- | ---- |
+| GET users/                     | [x]   | [x]  |
+| PATCH users/                   | [x]   | [x]  |
+| PATCH users/change-role/:id    | [x]   |      |
+| GET users/all                  | [x]   |      |
+| DELETE users/:id               | [x]   |      |
+| GET status/                    | [x]   | [x]  |
+| POST /genai/translate          | [x]   | [x]  |
+| POST /genai/search-in-document | [x]   | [x]  |
