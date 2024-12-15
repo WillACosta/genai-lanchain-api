@@ -112,14 +112,14 @@ npx prisma generate
 
 ## Authenticating and RBAC
 
-This projects uses `jwt` for authenticating users and managing session, also it uses Role-Based Access Control for limiting some aspects of the API, such as users management.
+This project uses `jwt` for authenticating users and managing sessions. It also uses Role-Based Access Control to limit some aspects of the API, such as user management.
 
-The current supported roles are: [`admin`, `user`]:
+Current supported roles are: [`admin`, `user`]:
 
-| Endpoint                    | Admin                 | User                  |
-| --------------------------- | --------------------- | --------------------- |
-| GET users/                  | <ul><li>[x]</li></ul> | <ul><li>[x]</li></ul> |
-| PATCH users/                | <ul><li>[x]</li></ul> | <ul><li>[x]</li></ul> |
-| PATCH users/change-role/:id | <ul><li>[x]</li></ul> |                       |
-| GET users/all               | <ul><li>[x]</li></ul> |                       |
-| DELETE users/:id            | <ul><li>[x]</li></ul> |                       |
+| Endpoint                    | Admin | User |
+| --------------------------- | ----- | ---- |
+| GET users/                  | [x]   | [x]  |
+| PATCH users/                | [x]   | [x]  |
+| PATCH users/change-role/:id | [x]   |      |
+| GET users/all               | [x]   |      |
+| DELETE users/:id            | [x]   |      |
