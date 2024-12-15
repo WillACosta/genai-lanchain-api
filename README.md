@@ -17,6 +17,8 @@ This is an Express service written in [TypeScript](https://www.typescriptlang.or
 - [PostgreSQL](https://www.postgresql.org/) database for store user data
 - [Prisma ORM](https://www.prisma.io/) for managing the database
 - Automated [OpenAPI](https://www.openapis.org/what-is-openapi) specifications using [JsDocs](https://jsdoc.app/) and [Swagger UI](https://swagger.io/tools/swagger-ui/) for generating documentation.
+- [Role-Based Access Control (RBAC)](https://www.redhat.com/en/topics/security/what-is-role-based-access-control) for managing API resources
+- Rotate Logs using [Winston](https://github.com/winstonjs/winston)
 
 ## Project Structure
 

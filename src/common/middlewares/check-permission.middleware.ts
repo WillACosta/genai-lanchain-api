@@ -1,15 +1,16 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response } from 'express'
 
 import { userDatProvider } from '@/di'
 import { UserRoles } from '@/modules/users/core'
+import { AppRequest } from '../types'
 
 export function hasPermission(role: UserRoles) {
 	const userProvider = userDatProvider
 
-	return (req: Request, res: Response, next: NextFunction) => {
-		const { user } = req.body
+	return (req: AppRequest, res: Response, next: NextFunction) => {
+		const { id } = req!.user!
 
-		userProvider.getUserById(user.id).then((user) => {
+		userProvider.getUserById(id).then((user) => {
 			if (!user) {
 				return res.status(403).json({
 					success: false,
@@ -21,8 +22,10 @@ export function hasPermission(role: UserRoles) {
 
 			if (user?.role !== role) {
 				return res.status(403).json({
-					status: false,
-					error: `You need to be a ${role} to access this functionality.`,
+					success: false,
+					error: {
+						message: `You don't have the necessary permissions to access this resource.`,
+					},
 				})
 			}
 

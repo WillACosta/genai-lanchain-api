@@ -15,12 +15,13 @@ export class UserDataProvider {
 		role: true,
 	}
 
-	insert = async ({ name, email, password }: UserParams) => {
+	insert = async ({ name, email, password, role }: UserParams) => {
 		return await prismaClient.users.create({
 			data: {
 				name,
 				email,
 				password,
+				role,
 			},
 			select: this._selectUserProperties,
 		})

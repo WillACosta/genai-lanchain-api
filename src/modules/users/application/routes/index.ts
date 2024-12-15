@@ -209,8 +209,8 @@ router.patch(
 router.patch(
 	'/change-role/:id',
 	validateRequestBody(changeUserRoleSchema),
-	hasPermission('admin'),
 	isAuthenticated,
+	hasPermission('admin'),
 	usersController.changeUserRole,
 )
 

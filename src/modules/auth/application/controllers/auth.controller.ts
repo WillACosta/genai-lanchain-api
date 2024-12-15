@@ -10,13 +10,22 @@ export class AuthController {
 	constructor(private _userDataProvider: UserDataProvider) {}
 
 	register = async (req: Request<UserParams>, res: Response) => {
-		const { password, role, ...user } = req.body
+		const { password, role, ...rest } = req.body
 		const encryptedPassword = this._encryptPassword(password)
 		const currentRole = role ?? 'user'
 
-		this._userDataProvider
+		const userFound = await this._userDataProvider.findUserByEmail(rest.email)
+
+		if (userFound) {
+			return res.status(400).json({
+				success: false,
+				error: { message: 'This email is already in use!' },
+			})
+		}
+
+		return this._userDataProvider
 			.insert({
-				...user,
+				...rest,
 				password: encryptedPassword,
 				role: currentRole,
 			})
@@ -29,6 +38,7 @@ export class AuthController {
 							name: user.name,
 							email: user.email,
 							createdAt: user.createdAt,
+							role: user.role,
 						},
 						token: this._generateAccessToken(user),
 					},
