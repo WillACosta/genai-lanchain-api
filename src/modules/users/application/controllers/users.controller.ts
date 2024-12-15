@@ -21,11 +21,18 @@ export class UsersController {
 		return await safeApiCall(() => this._userProvider.getAllUsers(), res)
 	}
 
-	updateUser = async (
+	changeUserRole = async (
 		req: AppRequest<{ id: string }>,
 		res: AppResponse<PrismaUser>,
 	) => {
 		const { id } = req.params
+		const { role } = req.body
+
+		return await safeApiCall(() => this._userProvider.updateRole(id, role), res)
+	}
+
+	updateUser = async (req: AppRequest, res: AppResponse<PrismaUser>) => {
+		const { id } = req!.user!
 		const { name, email } = req.body
 
 		return await safeApiCall(

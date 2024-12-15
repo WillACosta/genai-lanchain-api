@@ -14,12 +14,16 @@ export const userCredentialsSchema = z.object({
 
 export const updateUserSchema = z.object({
 	email: z.string().email('Invalid email address'),
-	name: z.string().min(1, 'name field is required'),
+	name: z.string().min(1, 'Name field is required'),
+})
+
+export const changeUserRoleSchema = z.object({
+	role: z.enum(['admin', 'user'], { required_error: 'Role is required' }),
 })
 
 export const translateTextSchema = z.object({
 	text: z.string().min(1, 'text field is required'),
-	language: z.string().min(1, 'language field is required'),
+	language: z.string().min(1, 'Language field is required'),
 })
 
 export const validateRequestBody = (schema: z.ZodSchema<any>) => {

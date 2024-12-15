@@ -1,14 +1,14 @@
 Generate the JSDocs comments using OpenAPI for the following API specs:
 
 ```yaml
-endpoint name: /users/all
-# path parameter type: string
-method: GET
+endpoint name: /users/change-role/{id}
+path parameter type: string
+method: Delete
+tags: [Users]
 request body: {
-  "name": "John Doe",
-	"email": "john.doe@email.com",
+  "role": ["admin", "user"]
 }
-summary: Returns all users
+summary: Update a user role and return it, this route is used only by admins
 200_response: {
 	"success": true,
 	"data": [
@@ -16,19 +16,19 @@ summary: Returns all users
       "id": "367b2539-bef4-412b-b94d-c9d2178dcdaa",
       "name": "John Doe",
       "email": "john.doe@gmail.com",
-      "createdAt": "2024-09-30T21:04:18.656Z"
+      "createdAt": "2024-09-30T21:04:18.656Z",
+      "role": "user"
     }
   ]
 }
-# 400_response: {
-#   "success": false,
-#   "error": {
-#     "message": [
-#       "Invalid email address",
-# 			"name field is required"
-#     ]
-#   }
-# }
+400_response: {
+  "success": false,
+  "error": {
+    "message": [
+      "Role is required.",
+    ]
+  }
+}
 headers: {
   "Content-Type": "application/json",
   "Authorization": "Bearer <token>"

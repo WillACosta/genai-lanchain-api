@@ -12,14 +12,16 @@ export class UserDataProvider {
 		name: true,
 		email: true,
 		createdAt: true,
+		role: true,
 	}
 
-	insert = async ({ name, email, password }: UserParams) => {
+	insert = async ({ name, email, password, role }: UserParams) => {
 		return await prismaClient.users.create({
 			data: {
 				name,
 				email,
 				password,
+				role,
 			},
 			select: this._selectUserProperties,
 		})
@@ -27,7 +29,7 @@ export class UserDataProvider {
 
 	update = async (
 		id: string,
-		{ name, email }: { name: string; email: string },
+		{ name, email, role }: { name: string; email: string; role?: string },
 	) => {
 		return await prismaClient.users.update({
 			where: {
@@ -36,6 +38,17 @@ export class UserDataProvider {
 			data: {
 				name,
 				email,
+				role,
+			},
+			select: this._selectUserProperties,
+		})
+	}
+
+	updateRole = async (id: string, role: string) => {
+		return await prismaClient.users.update({
+			where: { id },
+			data: {
+				role,
 			},
 			select: this._selectUserProperties,
 		})
