@@ -1,6 +1,6 @@
 import { AppRequest, AppResponse } from '@/common/types';
 import { searchInDocumentUseCase, translateUseCase } from '@/di';
-import { upload } from '../../core';
+import { uploadSingle } from '@/modules/core'
 
 export class GenAIController {
 	async translateText(
@@ -16,7 +16,7 @@ export class GenAIController {
 		req: AppRequest<any, any, { query: string }>,
 		res: AppResponse,
 	) {
-		upload(req, res, async (err) => {
+		uploadSingle(req, res, async (err) => {
 			if (err) {
 				return res
 					.status(500)

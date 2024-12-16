@@ -9,6 +9,7 @@ import {
 
 import { AuthController } from '@/modules/auth/application/controllers/auth.controller'
 import { GenAIController } from '@/modules/genai/application/controllers/gen-ai.controller'
+import { ResourcesController } from '@/modules/resources/application/controllers/resources.controller'
 import { UserDataProvider } from '@/modules/users/adapters/dataproviders/user.dataprovider'
 import { UsersController } from '@/modules/users/application/controllers/users.controller'
 
@@ -33,14 +34,18 @@ const usersController = new UsersController(userDatProvider)
 // Auth Module
 const authController = new AuthController(userDatProvider)
 
+// Resources Module
+const resourcesController = new ResourcesController()
+
 export {
-  authController,
-  documentService,
-  genAIController,
-  llmService,
-  prismaClient,
-  searchInDocumentUseCase,
-  translateUseCase,
-  userDatProvider,
-  usersController
+	authController,
+	documentService,
+	genAIController,
+	llmService,
+	prismaClient,
+	resourcesController,
+	searchInDocumentUseCase,
+	translateUseCase,
+	userDatProvider,
+	usersController,
 }
