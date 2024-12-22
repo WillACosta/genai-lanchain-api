@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import crypto from 'crypto'
-import multer from 'multer'
+import multer, { MulterError } from 'multer'
 import path from 'path'
 
 const storageConfig = multer.diskStorage({
@@ -41,7 +41,7 @@ export const uploadMultipleDocs = multer({
 }).array('documents', 10)
 
 export function handleMulterErrorMessages(err: any, res: Response): Response {
-	if (err instanceof multer.MulterError) {
+	if (err instanceof MulterError) {
 		switch (err.code) {
 			case 'LIMIT_FILE_SIZE':
 				return res.status(400).json({ error: 'File size exceeds the limit!' })

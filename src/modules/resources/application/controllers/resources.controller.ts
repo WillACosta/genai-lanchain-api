@@ -1,5 +1,11 @@
 import { AppRequest, AppResponse } from '@/common/types'
-import { handleMulterErrorMessages, uploadMultipleDocs } from '@/modules/core'
+import { storeDocumentsUseCase } from '@/di'
+
+import {
+	handleMulterErrorMessages,
+	UploadedDocument,
+	uploadMultipleDocs,
+} from '@/modules/core'
 
 export class ResourcesController {
 	async uploadDocs(
@@ -17,20 +23,21 @@ export class ResourcesController {
 			}
 
 			const files = req.files as Express.Multer.File[]
-			const fileDetails = files.map((file) => ({
-				originalName: file.originalname,
-				fileName: file.filename,
-				path: file.path,
-				size: file.size,
-			}))
+			const docs = files.map(
+				(file) =>
+					({
+						originalName: file.originalname,
+						fileName: file.filename,
+						path: file.path,
+						size: file.size,
+					} as UploadedDocument),
+			)
 
-			// TODO: Implement logic to process and store the uploaded files
+			await storeDocumentsUseCase.invoke({ docs })
 
 			return res.status(201).json({
 				success: true,
-				data: {
-					documents: fileDetails,
-				},
+				data: { docs },
 			})
 		})
 	}

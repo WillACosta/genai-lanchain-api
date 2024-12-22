@@ -6,14 +6,14 @@ import {
 export class LLMService {
 	constructor() {}
 
-	get llm() {
+	static get llm() {
 		return new ChatGoogleGenerativeAI({
 			model: 'gemini-1.5-flash',
 			apiKey: process.env['LLM_API_KEY'],
 		})
 	}
 
-	get textEmbedding() {
+	static get textEmbedding() {
 		return new GoogleGenerativeAIEmbeddings({
 			model: 'text-embedding-004',
 			apiKey: process.env['LLM_API_KEY'],

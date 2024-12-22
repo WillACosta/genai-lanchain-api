@@ -1,12 +1,13 @@
 {
   "cSpell.words": [
-    "dataprovider",
-    "dataproviders",
-    "gemini",
-    "nodenext",
-    "openapi",
-    "predev",
-    "prestart",
-    "usecases"
-  ]
+		"dataprovider",
+		"dataproviders",
+		"gemini",
+		"nodenext",
+		"openapi",
+		"predev",
+		"prestart",
+		"qdrant",
+		"usecases"
+	]
 }

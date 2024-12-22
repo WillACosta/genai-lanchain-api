@@ -16,23 +16,15 @@ import {
 } from '../../utils'
 
 import { UseCase } from '@/common/types'
+import { ChatMemory, DocumentsService, LLMService } from '@/modules/core'
 import { Params, Result } from './types'
 
-import {
-	ChatMemory,
-	DocumentsService,
-	LLMService,
-} from '@/modules/genai/adapters'
-
 export class SearchInDocumentUseCase implements UseCase<Result, Params> {
-	constructor(
-		private _llmService: LLMService,
-		private _documentService: DocumentsService,
-	) {}
+	constructor(private _documentService: DocumentsService) {}
 
 	async invoke({ filePath, query, userId }: Params): Promise<Result> {
 		const chatMemory = new ChatMemory(userId)
-		const llmModel = this._llmService.llm
+		const llmModel = LLMService.llm
 		const docs = await this._documentService.loadDocument(filePath)
 		const { retriever } = await this._documentService.initializeVectorStore(
 			docs,

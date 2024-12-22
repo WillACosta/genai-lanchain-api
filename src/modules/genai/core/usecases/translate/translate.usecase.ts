@@ -2,7 +2,7 @@ import { StringOutputParser } from '@langchain/core/output_parsers'
 import { ChatPromptTemplate } from '@langchain/core/prompts'
 
 import { UseCase } from '@/common/types'
-import { LLMService } from '@/modules/genai/adapters'
+import { LLMService } from '@/modules/core'
 
 type Params = {
 	text: string
@@ -10,8 +10,6 @@ type Params = {
 }
 
 export class TranslateTextUseCase implements UseCase<string, Params> {
-	constructor(private _llmService: LLMService) {}
-
 	async invoke(params: { text: string; language: string }): Promise<string> {
 		const { text, language } = params
 
@@ -22,7 +20,7 @@ export class TranslateTextUseCase implements UseCase<string, Params> {
 		])
 
 		const chain = promptTemplate
-			.pipe(this._llmService.llm)
+			.pipe(LLMService.llm)
 			.pipe(new StringOutputParser())
 
 		return await chain.invoke({
