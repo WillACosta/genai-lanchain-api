@@ -84,12 +84,10 @@ cp .env.example .env
 > From the app's root directory, run the following command to build and running docker containers:
 
 ```shell
-make build
-# or
 make run
 ```
 
-> The application will be available at `http://localhost:3000`.<br>For more commands see `Makefile`.
+> The application will be available at `http://localhost:3000`.<br>For more commands see `Makefile` or run `make help`.
 
 ## Documentation
 
