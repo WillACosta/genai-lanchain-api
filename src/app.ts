@@ -8,6 +8,7 @@ import { appConfig } from './config'
 
 import AuthRoutes from '@/modules/auth/application/routes'
 import GenAIRoutes from '@/modules/genai/application/routes'
+import ResourcesRoutes from '@/modules/resources/application/routes'
 import StatusRoutes from '@/modules/status/application/routes'
 import UserRoutes from '@/modules/users/application/routes'
 
@@ -29,6 +30,7 @@ app.use('/', AuthRoutes)
 app.use('/status', StatusRoutes)
 app.use('/users', UserRoutes)
 app.use('/gen-ai', GenAIRoutes)
+app.use('/resources', ResourcesRoutes)
 
 app.listen(port, () => {
 	console.log(`Server listening to http://localhost:${port}`)

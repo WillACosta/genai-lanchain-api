@@ -16,27 +16,32 @@ import {
 } from '../../utils'
 
 import { UseCase } from '@/common/types'
-import { Params, Result } from './types'
-
 import {
 	ChatMemory,
 	DocumentsService,
 	LLMService,
-} from '@/modules/genai/adapters'
+	VectorDataBaseProvider,
+} from '@/modules/core'
+
+type Params = {
+	userId: string
+	query: string
+}
+
+type Result = {
+	result: string
+}
 
 export class SearchInDocumentUseCase implements UseCase<Result, Params> {
 	constructor(
-		private _llmService: LLMService,
 		private _documentService: DocumentsService,
+		private _vectorDBProvider: VectorDataBaseProvider,
 	) {}
 
-	async invoke({ filePath, query, userId }: Params): Promise<Result> {
+	async invoke({ query, userId }: Params): Promise<Result> {
 		const chatMemory = new ChatMemory(userId)
-		const llmModel = this._llmService.llm
-		const docs = await this._documentService.loadDocument(filePath)
-		const { retriever } = await this._documentService.initializeVectorStore(
-			docs,
-		)
+		const llmModel = LLMService.llm
+		const retriever = this._vectorDBProvider.asRetriever
 
 		const contextualizedPrompt = ChatPromptTemplate.fromMessages([
 			['system', CONTEXTUALIZED_SYSTEM_PROMPT],

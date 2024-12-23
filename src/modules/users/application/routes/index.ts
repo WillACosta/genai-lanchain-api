@@ -46,8 +46,13 @@ const router = express.Router()
  *                       name:
  *                         type: string
  *                         example: User
- *     security:
- *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
  */
 router.get('/', isAuthenticated, usersController.getUser)
 
@@ -63,6 +68,12 @@ router.get('/', isAuthenticated, usersController.getUser)
  *         required: true
  *         schema:
  *           type: string
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
  *     requestBody:
  *       required: true
  *       content:
@@ -120,9 +131,7 @@ router.get('/', isAuthenticated, usersController.getUser)
  *                       type: array
  *                       items:
  *                         type: string
- *                       example: ["Invalid email address", "name field is required"]
- *     security:
- *       - bearerAuth: []
+ *                       example: ["Invalid email address", "name field is
  */
 router.patch(
 	'/',
@@ -143,6 +152,12 @@ router.patch(
  *         required: true
  *         schema:
  *           type: string
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
  *     requestBody:
  *       required: true
  *       content:
@@ -203,8 +218,6 @@ router.patch(
  *                       items:
  *                         type: string
  *                         example: Role is required.
- *     security:
- *       - bearerAuth: []
  */
 router.patch(
 	'/change-role/:id',
@@ -251,14 +264,10 @@ router.patch(
  *                         type: string
  *                         format: date-time
  *                         example: 2024-09-30T21:04:18.656Z
- *     headers:
- *       Content-Type:
- *         description: The content type of the response
- *         schema:
- *           type: string
- *           example: application/json
- *       Authorization:
- *         description: Bearer token for authorization
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
  *         schema:
  *           type: string
  *           example: Bearer <token>
@@ -282,6 +291,12 @@ router.get(
  *         required: true
  *         schema:
  *           type: string
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
  *     responses:
  *       200:
  *         description: Successfully deleted the user
@@ -314,8 +329,6 @@ router.get(
  *                       role:
  *                         type: string
  *                         example: user
- *     security:
- *       - bearerAuth: []
  */
 router.delete(
 	'/:id',

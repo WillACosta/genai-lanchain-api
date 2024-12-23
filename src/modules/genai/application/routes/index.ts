@@ -58,8 +58,13 @@ const router = express.Router()
  *                   items:
  *                     type: string
  *                   example: ["text field should not be empty"]
- *     security:
- *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
  */
 router.post(
 	'/translate',
@@ -70,24 +75,20 @@ router.post(
 
 /**
  * @swagger
- * /genai/search-in-document:
+ * /genai/search-in-documents:
  *   post:
- *     summary: Performs a search in a PDF document and returns a text as a response for follow-up questions
+ *     summary: Performs a search in stored documents and returns a text as a response
  *     tags: [AI]
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               file:
- *                 type: string
- *                 format: binary
- *                 description: The PDF file to be uploaded and analyzed
  *               query:
  *                 type: string
- *                 example: What is this document about?
+ *                 example: What is the purpose of the developed projects on these documents?
  *     responses:
  *       200:
  *         description: Success
@@ -101,9 +102,31 @@ router.post(
  *                   example: true
  *                 data:
  *                   type: string
- *                   example: This document describes how to implement an API service using Node, Docker and Redis.
- *       400:
- *         description: Bad Request
+ *                   example: The project aims to develop and validate a web platform (software) for automatically correcting assessments created in Microsoft Word.
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
+ */
+router.post(
+	'/search-in-documents',
+	isAuthenticated,
+	genAIController.searchInDocuments,
+)
+
+/**
+ * @swagger
+ * /genai/chat-history:
+ *   get:
+ *     tags:
+ *       - AI
+ *     summary: Returns all messages between human and AI from chat history
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved chat history
  *         content:
  *           application/json:
  *             schema:
@@ -111,19 +134,43 @@ router.post(
  *               properties:
  *                 success:
  *                   type: boolean
- *                   example: false
- *                 error:
+ *                   example: true
+ *                 data:
  *                   type: array
  *                   items:
- *                     type: string
- *                   example: ["Please provide a valid file!"]
- *     security:
- *       - bearerAuth: []
+ *                     type: object
+ *                     properties:
+ *                       lc:
+ *                         type: integer
+ *                         example: 1
+ *                       type:
+ *                         type: string
+ *                         example: constructor
+ *                       id:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *                         example: ["langchain_core", "messages", "HumanMessage"]
+ *                       kwargs:
+ *                         type: object
+ *                         properties:
+ *                           content:
+ *                             type: string
+ *                             example: What is the purpose of the developed projects on these documents?
+ *                           additional_kwargs:
+ *                             type: object
+ *                             example: {}
+ *                           response_metadata:
+ *                             type: object
+ *                             example: {}
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
  */
-router.post(
-	'/search-in-document',
-	isAuthenticated,
-	genAIController.searchInDocument,
-)
+router.get('/chat-history', isAuthenticated, genAIController.getChatHistory)
 
 export default router

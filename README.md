@@ -41,14 +41,18 @@ modules: application features
       utils: class and constant utilities for this module
 ```
 
-### Search In Document Flow
+### Search In Documents Flow
 
-The search in document endpoint is the most complex of this application, it uses RAG concepts to break down the provided
-PDF document into small chunks and use it as context to the follow-up questions. Also, it uses Redis to store
-and retrieve chat history during user's session.
+To perform a search in documents and ask questions about them, we have two endpoints for that:
 
-> A possible improvement, is to have a separated endpoint for uploading documents and another one for handling questions
-> to it. For this initial version the endpoint accepts one document at a time and a question is needed, check this process on the diagram below:
+- `POST /resources/docs`
+- `POST /genai/search-in-documents`
+
+On `/resources/docs` the documents are uploaded to local system and then broke down into small chunks to be stored on a vector database.
+
+The `/genai/search-in-documents` endpoint uses RAG concept, it's responsible to create an Embedding of the user question, and retrieve the most relevant chunks from vector database using it as context for follow-up questions. Also, it uses Redis to store and retrieve chat history during user's session.
+
+Check this process on the diagram below:
 
 ![GenAI Search in Document Flow](docs/genai-flow.png 'GenAI Search in Document Flow')
 
@@ -80,10 +84,10 @@ cp .env.example .env
 > From the app's root directory, run the following command to build and running docker containers:
 
 ```shell
-docker compose up --build
+make run
 ```
 
-> The application will be available at `http://localhost:3000`.<br>
+> The application will be available at `http://localhost:3000`.<br>For more commands see `Makefile` or run `make help`.
 
 ## Documentation
 
@@ -126,3 +130,5 @@ Current supported roles are: [`admin`, `user`]:
 | GET status/                    | [x]   | [x]  |
 | POST /genai/translate          | [x]   | [x]  |
 | POST /genai/search-in-document | [x]   | [x]  |
+| GET /genai/chat-history        | [x]   | [x]  |
+| POST /resources/docs           | [x]   | [x]  |

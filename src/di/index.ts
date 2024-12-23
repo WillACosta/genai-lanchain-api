@@ -1,30 +1,29 @@
 import { PrismaClient } from '@prisma/client'
 
-import { DocumentsService, LLMService } from '@/modules/genai/adapters'
-
 import {
-  SearchInDocumentUseCase,
-  TranslateTextUseCase,
-} from '@/modules/genai/core'
+	GenAIController,
+	SearchInDocumentUseCase,
+	TranslateTextUseCase,
+} from '@/modules/genai'
 
-import { AuthController } from '@/modules/auth/application/controllers/auth.controller'
-import { GenAIController } from '@/modules/genai/application/controllers/gen-ai.controller'
-import { UserDataProvider } from '@/modules/users/adapters/dataproviders/user.dataprovider'
-import { UsersController } from '@/modules/users/application/controllers/users.controller'
+import { AuthController } from '@/modules/auth'
+import { DocumentsService, VectorDataBaseProvider } from '@/modules/core'
+import { ResourcesController, StoreDocumentsUseCase } from '@/modules/resources'
+import { UserDataProvider, UsersController } from '@/modules/users'
 
 // Common
-const llmService = new LLMService()
 const prismaClient = new PrismaClient()
+const vectorDataBaseProvider = new VectorDataBaseProvider()
 
 // Gen AI Module
 const genAIController = new GenAIController()
-const documentService = new DocumentsService(llmService)
-const searchInDocumentUseCase = new SearchInDocumentUseCase(
-	llmService,
+const documentService = new DocumentsService()
+const searchInDocumentsUseCase = new SearchInDocumentUseCase(
 	documentService,
+	vectorDataBaseProvider,
 )
 
-const translateUseCase = new TranslateTextUseCase(llmService)
+const translateUseCase = new TranslateTextUseCase()
 
 // User Module
 const userDatProvider = new UserDataProvider()
@@ -33,14 +32,24 @@ const usersController = new UsersController(userDatProvider)
 // Auth Module
 const authController = new AuthController(userDatProvider)
 
+// Resources Module
+const resourcesController = new ResourcesController()
+const storeDocumentsUseCase = new StoreDocumentsUseCase(
+	documentService,
+	vectorDataBaseProvider,
+)
+
 export {
-  authController,
-  documentService,
-  genAIController,
-  llmService,
-  prismaClient,
-  searchInDocumentUseCase,
-  translateUseCase,
-  userDatProvider,
-  usersController
+	authController,
+	documentService,
+	genAIController,
+	prismaClient,
+	resourcesController,
+	searchInDocumentsUseCase,
+	storeDocumentsUseCase,
+	translateUseCase,
+	userDatProvider,
+	usersController,
+	vectorDataBaseProvider,
 }
+
