@@ -1,6 +1,6 @@
 import { AppRequest, AppResponse } from '@/common/types';
-import { searchInDocumentUseCase, translateUseCase } from '@/di';
-import { uploadSingle } from '@/modules/core'
+import { searchInDocumentsUseCase, translateUseCase } from '@/di'
+import { ChatMemory } from '@/modules/core'
 
 export class GenAIController {
 	async translateText(
@@ -12,37 +12,26 @@ export class GenAIController {
 		return res.send({ success: true, data: result })
 	}
 
-	async searchInDocument(
+	async searchInDocuments(
 		req: AppRequest<any, any, { query: string }>,
 		res: AppResponse,
 	) {
-		uploadSingle(req, res, async (err) => {
-			if (err) {
-				return res
-					.status(500)
-					.json({ success: false, error: { message: 'File upload failed!' } })
-			}
+		const { query } = req.body
+		const { result } = await searchInDocumentsUseCase.invoke({
+			query: query,
+			userId: req.user!.id,
+		})
 
-			if (!req.file) {
-				return res.status(400).json({
-					success: false,
-					error: { message: 'Please provide a valid file!' },
-				})
-			}
+		return res.send({ success: true, data: result })
+	}
 
-			const query = req.body.query
-			const filePath = `/uploads/${req.file.filename}`
+	async getChatHistory(req: AppRequest, res: AppResponse) {
+		const chatMemory = new ChatMemory(req.user!.id)
+		const history = await chatMemory.retrieveMemoryHistory()
 
-			const { result } = await searchInDocumentUseCase.invoke({
-				query,
-				filePath,
-				userId: req.user!.id,
-			})
-
-			return res.json({
-				success: true,
-				data: result,
-			})
+		return res.send({
+			success: true,
+			data: history,
 		})
 	}
 }

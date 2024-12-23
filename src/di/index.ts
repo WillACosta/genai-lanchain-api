@@ -18,7 +18,10 @@ const vectorDataBaseProvider = new VectorDataBaseProvider()
 // Gen AI Module
 const genAIController = new GenAIController()
 const documentService = new DocumentsService()
-const searchInDocumentUseCase = new SearchInDocumentUseCase(documentService)
+const searchInDocumentsUseCase = new SearchInDocumentUseCase(
+	documentService,
+	vectorDataBaseProvider,
+)
 
 const translateUseCase = new TranslateTextUseCase()
 
@@ -42,10 +45,11 @@ export {
 	genAIController,
 	prismaClient,
 	resourcesController,
-	searchInDocumentUseCase,
+	searchInDocumentsUseCase,
 	storeDocumentsUseCase,
 	translateUseCase,
 	userDatProvider,
 	usersController,
 	vectorDataBaseProvider,
 }
+

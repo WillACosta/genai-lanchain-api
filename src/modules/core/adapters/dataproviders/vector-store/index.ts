@@ -1,3 +1,4 @@
+import { VectorStoreRetriever } from '@langchain/core/vectorstores'
 import { QdrantVectorStore } from '@langchain/qdrant'
 import { QdrantClient } from '@qdrant/js-client-rest'
 import { Document } from 'langchain/document'
@@ -18,8 +19,8 @@ export class VectorDataBaseProvider {
 		})
 	}
 
-	get asRetriever() {
-		return this._vectorStore.asRetriever
+	get asRetriever(): VectorStoreRetriever<QdrantVectorStore> {
+		return this._vectorStore.asRetriever()
 	}
 
 	storeDocuments(documents: Document[]): Promise<void> {

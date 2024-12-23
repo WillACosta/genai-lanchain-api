@@ -8,10 +8,6 @@ services:
       - '3000:3000'
     env_file:
       - .env
-    environment:
-      IS_DOCKER: true
-      DATABASE_URL: ${DATABASE_URL_DOCKER}
-      REDIS_URL: ${REDIS_URL_DOCKER}
     volumes:
       - ./src:/usr/workspace/app/src
       - pnpm_store:/pnpm/.pnpm-store
@@ -19,6 +15,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - qdrant
 
   postgres:
     container_name: genai_app_postgres

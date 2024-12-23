@@ -24,7 +24,11 @@ const swaggerDefinition = {
 		},
 		{
 			name: 'AI',
-			description: 'Endpoints related to gen-AI features',
+			description: 'Endpoints related to gen-ai features',
+		},
+		{
+			name: 'Resources',
+			description: 'Endpoints related to resources for gen-ai features',
 		},
 	],
 	components: {

@@ -5,7 +5,6 @@
 	"scripts": {
 		"prestart": "node dynamic-url-config.js",
 		"migrate:dev": "npx prisma migrate dev",
-		"predev": "node dynamic-url-config.js",
 		"start": "tsx src/app.ts",
 		"dev": "tsx watch src/app.ts",
 		"postinstall": "npx prisma generate"
