@@ -58,8 +58,13 @@ const router = express.Router()
  *                   items:
  *                     type: string
  *                   example: ["text field should not be empty"]
- *     security:
- *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
  */
 router.post(
 	'/translate',
@@ -98,8 +103,13 @@ router.post(
  *                 data:
  *                   type: string
  *                   example: The project aims to develop and validate a web platform (software) for automatically correcting assessments created in Microsoft Word.
- *     security:
- *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
  */
 router.post(
 	'/search-in-documents',
@@ -154,12 +164,6 @@ router.post(
  *                             type: object
  *                             example: {}
  *     parameters:
- *       - in: header
- *         name: Content-Type
- *         required: true
- *         schema:
- *           type: string
- *           example: application/json
  *       - in: header
  *         name: Authorization
  *         required: true

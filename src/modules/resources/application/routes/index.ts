@@ -72,12 +72,6 @@ const router = express.Router()
  *                         example: Please provide at least one file!
  *     parameters:
  *       - in: header
- *         name: Content-Type
- *         required: true
- *         schema:
- *           type: string
- *           example: application/json
- *       - in: header
  *         name: Authorization
  *         required: true
  *         schema:
