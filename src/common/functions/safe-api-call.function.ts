@@ -8,14 +8,19 @@ export async function safeApiCall<T>(
 ): Promise<AppResponse<T>> {
 	try {
 		const data = await handler()
-		return res.status(200).json({
-			success: true,
-			data,
-		})
+		return res.send({ data })
 	} catch (err: any) {
+		if (err instanceof Error && err.message)
+			return res.status(500).json({
+				error: {
+					message: err.message,
+				},
+			})
+
 		return res.status(500).json({
-			success: false,
-			error: err,
+			error: {
+				message: 'Unexpected error!',
+			},
 		})
 	}
 }

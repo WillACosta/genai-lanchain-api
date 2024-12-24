@@ -1,3 +1,4 @@
+import { safeApiCall } from '@/common/functions'
 import { AppRequest, AppResponse } from '@/common/types'
 import { storeDocumentsUseCase } from '@/di'
 
@@ -17,7 +18,6 @@ export class ResourcesController {
 
 			if (!req.files || (req.files as Express.Multer.File[]).length === 0) {
 				return res.status(400).json({
-					success: false,
 					error: { message: 'Please provide at least one document!' },
 				})
 			}
@@ -33,10 +33,9 @@ export class ResourcesController {
 					} as UploadedDocument),
 			)
 
-			await storeDocumentsUseCase.invoke({ docs })
+			await safeApiCall(() => storeDocumentsUseCase.invoke({ docs }), res)
 
-			return res.status(201).json({
-				success: true,
+			return res.status(200).json({
 				data: { docs },
 			})
 		})

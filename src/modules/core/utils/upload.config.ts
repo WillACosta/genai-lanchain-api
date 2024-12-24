@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import { AppResponse } from '@/common/types'
 import crypto from 'crypto'
 import multer, { MulterError } from 'multer'
 import path from 'path'
@@ -20,11 +21,15 @@ const fileFilter = (
 	file: Express.Multer.File,
 	cb: multer.FileFilterCallback,
 ) => {
-	const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf']
+	const allowedTypes = ['application/pdf']
 	if (allowedTypes.includes(file.mimetype)) {
 		cb(null, true)
 	} else {
-		cb(new Error('Invalid file type. Only JPEG, PNG, and PDF are allowed.'))
+		cb(
+			new Error('Invalid file type. Only PDF files are allowed.', {
+				cause: 'FILE_NOT_ALLOWED',
+			}),
+		)
 	}
 }
 
@@ -40,21 +45,50 @@ export const uploadMultipleDocs = multer({
 	limits: { fileSize: 5 * 1024 * 1024 },
 }).array('documents', 10)
 
-export function handleMulterErrorMessages(err: any, res: Response): Response {
+export function handleMulterErrorMessages(
+	err: any,
+	res: AppResponse,
+): Response {
 	if (err instanceof MulterError) {
 		switch (err.code) {
 			case 'LIMIT_FILE_SIZE':
-				return res.status(400).json({ error: 'File size exceeds the limit!' })
+				return res.status(400).json({
+					error: {
+						message: 'File size exceeds the limit!',
+					},
+				})
 			case 'LIMIT_FILE_COUNT':
-				return res.status(400).json({ error: 'Too many files uploaded!' })
+				return res.status(400).json({
+					error: {
+						message: 'Too many files uploaded!',
+					},
+				})
 			case 'LIMIT_UNEXPECTED_FILE':
-				return res.status(400).json({ error: 'Unexpected file uploaded!' })
+				return res.status(400).json({
+					error: {
+						message: 'Unexpected file uploaded!',
+					},
+				})
 			default:
-				return res
-					.status(400)
-					.json({ error: 'Unexpected error was occurred while uploading!' })
+				return res.status(400).json({
+					error: {
+						message: 'Unexpected error was occurred while uploading!',
+					},
+				})
 		}
 	}
 
-	return res.status(500).json({ error: 'An unknown error occurred!' })
+	if (err instanceof Error && err.cause == 'FILE_NOT_ALLOWED') {
+		return res.status(400).json({
+			error: {
+				message: err.message,
+			},
+		})
+	}
+
+	return res.status(500).json({
+		error: {
+			message: 'An unknown error occurred!',
+		},
+	})
 }

@@ -26,9 +26,6 @@ const router = express.Router()
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
  *                 data:
  *                   type: object
  *                   properties:
@@ -95,9 +92,6 @@ router.get('/', isAuthenticated, usersController.getUser)
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
  *                 data:
  *                   type: object
  *                   properties:
@@ -121,9 +115,6 @@ router.get('/', isAuthenticated, usersController.getUser)
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
  *                 error:
  *                   type: object
  *                   properties:
@@ -176,9 +167,6 @@ router.patch(
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
  *                 data:
  *                   type: array
  *                   items:
@@ -207,9 +195,6 @@ router.patch(
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
  *                 error:
  *                   type: object
  *                   properties:
@@ -243,9 +228,6 @@ router.patch(
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
  *                 data:
  *                   type: array
  *                   items:
@@ -305,9 +287,6 @@ router.get(
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
  *                 data:
  *                   type: array
  *                   items:

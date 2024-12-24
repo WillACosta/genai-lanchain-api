@@ -22,8 +22,12 @@ export const changeUserRoleSchema = z.object({
 })
 
 export const translateTextSchema = z.object({
-	text: z.string().min(1, 'text field is required'),
+	text: z.string().min(1, 'Text field is required'),
 	language: z.string().min(1, 'Language field is required'),
+})
+
+export const searchInDocumentsSchema = z.object({
+	query: z.string().min(1, 'Query field is required'),
 })
 
 export const validateRequestBody = (schema: z.ZodSchema<any>) => {
