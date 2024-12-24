@@ -14,7 +14,6 @@ export interface AppRequest<
 }
 
 export type AppResponse<T = any> = Response<{
-	success: boolean
 	data?: T
-	error?: { message: string | string[]; code?: string }
+	error?: { message: string | string[] }
 }>

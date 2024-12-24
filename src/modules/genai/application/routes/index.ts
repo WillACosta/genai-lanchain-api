@@ -2,6 +2,7 @@ import express from 'express'
 
 import {
 	isAuthenticated,
+	searchInDocumentsSchema,
 	translateTextSchema,
 	validateRequestBody,
 } from '@/common/middlewares'
@@ -37,9 +38,6 @@ const router = express.Router()
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
  *                 data:
  *                   type: string
  *                   example: "Hello!"
@@ -50,9 +48,6 @@ const router = express.Router()
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
  *                 error:
  *                   type: array
  *                   items:
@@ -97,9 +92,6 @@ router.post(
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
  *                 data:
  *                   type: string
  *                   example: The project aims to develop and validate a web platform (software) for automatically correcting assessments created in Microsoft Word.
@@ -114,6 +106,7 @@ router.post(
 router.post(
 	'/search-in-documents',
 	isAuthenticated,
+	validateRequestBody(searchInDocumentsSchema),
 	genAIController.searchInDocuments,
 )
 
@@ -132,9 +125,6 @@ router.post(
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
  *                 data:
  *                   type: array
  *                   items:

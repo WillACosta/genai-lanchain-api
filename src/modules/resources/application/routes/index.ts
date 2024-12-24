@@ -32,9 +32,6 @@ const router = express.Router()
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
  *                 data:
  *                   type: array
  *                   items:
@@ -59,9 +56,6 @@ const router = express.Router()
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
  *                 error:
  *                   type: object
  *                   properties:
