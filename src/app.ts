@@ -33,5 +33,5 @@ app.use('/gen-ai', GenAIRoutes)
 app.use('/resources', ResourcesRoutes)
 
 app.listen(port, () => {
-	console.log(`Server listening to http://localhost:${port}`)
+	console.log(`Server listening on http://localhost:${port}`)
 })

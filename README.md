@@ -132,3 +132,9 @@ Current supported roles are: [`admin`, `user`]:
 | POST /genai/search-in-document | [x]   | [x]  |
 | GET /genai/chat-history        | [x]   | [x]  |
 | POST /resources/docs           | [x]   | [x]  |
+
+## Services Dashboards
+
+Qdrant Dashboard: https://localhost:6333/dashboard
+PostgreSQL via Prisma: `npx prisma studio`
+Redis: Access via vs code extension [Redis for VS Code](https://redis.io/docs/latest/develop/tools/redis-for-vscode/)

@@ -1,8 +1,9 @@
 help:
 	@echo "Available commands:"
-	@echo "  run        Start app and services using Docker."
-	@echo "  stop-all   Stop all services running on Docker."
-	@echo "  remove     Remove all Docker containers."
+	@echo "  run        Start services."
+	@echo "  build      Build and start services."
+	@echo "  stop-all   Stop all services."
+	@echo "  remove     Remove all containers."
 	@echo "  clean      Remove temporary and cache files."
 
 run:

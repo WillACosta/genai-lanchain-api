@@ -122,7 +122,7 @@ router.get('/', isAuthenticated, usersController.getUser)
  *                       type: array
  *                       items:
  *                         type: string
- *                       example: ["Invalid email address", "name field is
+ *                       example: ["Invalid email address", "name field is required"]
  */
 router.patch(
 	'/',

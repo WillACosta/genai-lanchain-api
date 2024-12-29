@@ -33,11 +33,7 @@ export class ResourcesController {
 					} as UploadedDocument),
 			)
 
-			await safeApiCall(() => storeDocumentsUseCase.invoke({ docs }), res)
-
-			return res.status(200).json({
-				data: { docs },
-			})
+			return safeApiCall(() => storeDocumentsUseCase.invoke({ docs }), res)
 		})
 	}
 }
